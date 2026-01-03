@@ -1,0 +1,25 @@
+CREATE DATABASE IF NOT EXISTS plantlog_db;
+USE plantlog_db;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(120) NOT NULL UNIQUE,
+  password_hash CHAR(64) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS plant_logs (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  plant_name VARCHAR(120) NOT NULL,
+  planting_date DATE NOT NULL,
+  season ENUM('Winter','Spring','Summer','Autumn') NOT NULL,
+  status ENUM('Seed','Sprout','Growing','Flowering','Harvested') NOT NULL,
+  location ENUM('Indoor','Outdoor','Pot','Ground') NOT NULL,
+  notes TEXT,
+  photo LONGBLOB NULL,
+  photo_mime VARCHAR(40) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
